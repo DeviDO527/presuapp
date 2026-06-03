@@ -17,7 +17,7 @@ export default function WelcomeScreen() {
       }
     };
     checkUser();
-  }, []);
+  }, [router]);
 
   return (
     <SafeAreaView style={styles.container}>

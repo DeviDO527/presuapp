@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Colors } from '../../constants/Colors';
 import { Transaction, TransactionItem } from '../../components/ui/TransactionItem';
