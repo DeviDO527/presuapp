@@ -23,7 +23,6 @@ export default function EditTransactionScreen() {
   const [amount, setAmount] = useState('');
   const [type, setType] = useState<'expense' | 'income'>('expense');
   const [selectedCat, setSelectedCat] = useState('comida');
-  const [note, setNote] = useState('');
   const [loading, setLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 

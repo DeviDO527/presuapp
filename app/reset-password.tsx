@@ -15,7 +15,6 @@ export default function ResetPasswordScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sessionSet, setSessionSet] = useState(false);
 
   useEffect(() => {
     const checkRecoverySession = async () => {
@@ -25,7 +24,6 @@ export default function ResetPasswordScreen() {
           console.log('[ResetPassword] Estableciendo sesión desde URL...');
           await CloudAPI.setSessionFromUrl(url);
           console.log('[ResetPassword] Sesión establecida correctamente.');
-          setSessionSet(true);
         } catch (error: any) {
           console.error('[ResetPassword] Error al establecer sesión:', error);
           Alert.alert(
@@ -39,7 +37,7 @@ export default function ResetPasswordScreen() {
       }
     };
     checkRecoverySession();
-  }, [url]);
+  }, [url, router]);
 
   const handleResetPassword = async () => {
     console.log('[ResetPassword] Botón presionado. Password length:', password.length, 'Confirm length:', confirmPassword.length);

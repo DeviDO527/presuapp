@@ -1,7 +1,7 @@
 import { Tabs, useRouter } from 'expo-router';
 import { Colors } from '../../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
 function AddButton({ onPress }: { onPress: () => void }) {
   return (
