@@ -121,8 +121,3 @@ Se incluyen capturas SVG que representan las pantallas clave de la aplicación. 
 - Register: ![Register](screenshots/register.svg)
 - Wallet: ![Wallet](screenshots/wallet.svg)
 
-Si quieres, puedo:
-
-- Generar automáticamente las diapositivas (PDF o PowerPoint) con este contenido.
-- Crear una versión `.docx` lista para imprimir (ahora creé una versión HTML que Word puede abrir y guardar como `.docx`).
-- Añadir capturas de pantalla de las pantallas clave al documento.
