@@ -1,170 +1,161 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <title>Presu — Descripción del Proyecto</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-        margin: 40px;
-        color: #222;
-      }
-      h1 {
-        color: #0b3b3b;
-      }
-      h2 {
-        color: #0b3b3b;
-      }
-      p,
-      li {
-        line-height: 1.5;
-      }
-      pre {
-        background: #f6f8fa;
-        padding: 12px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Presu — Descripción del Proyecto</h1>
-    <h2>Resumen ejecutivo</h2>
-    <p>
-      Presu es una aplicación móvil (Expo / React Native) para gestión personal
-      de finanzas que ayuda a los usuarios a ordenar sus ingresos, gastos y
-      presupuestos. Ofrece autenticación con Supabase, registro y recuperación
-      de contraseña, gestión de transacciones, visualizaciones de flujo y un
-      panel de cartera.
-    </p>
 
-    <h2>Propósito y público objetivo</h2>
-    <ul>
-      <li>
-        <strong>Propósito:</strong> Facilitar la organización y seguimiento del
-        flujo de caja personal y el control de presupuestos mensuales.
-      </li>
-      <li>
-        <strong>Público objetivo:</strong> Usuarios jóvenes-adultos y
-        profesionales; pequeñas PYMEs.
-      </li>
-    </ul>
+<head>
+  <meta charset="utf-8" />
+  <title>Presu — Descripción del Proyecto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 40px;
+      color: #222;
+    }
 
-    <h2>Funcionalidades principales</h2>
-    <ul>
-      <li>Registro e inicio de sesión con Supabase Auth.</li>
-      <li>Recuperación de contraseña mediante enlace y tokens.</li>
-      <li>CRUD de transacciones.</li>
-      <li>
-        Visualización de cartera: balance, ingresos vs gastos y flujo mensual.
-      </li>
-      <li>Gestión de presupuestos por categoría.</li>
-      <li>Soporte multiplataforma (iOS/Android/web).</li>
-    </ul>
+    h1 {
+      color: #0b3b3b;
+    }
 
-    <h2>Arquitectura y diseño técnico</h2>
-    <p>
-      Framework: Expo + React Native con TypeScript. Enrutamiento con
-      <em>expo-router</em>. Backend: Supabase (Auth + Postgres). Cliente
-      Supabase en <em>services/supabase.ts</em> y API en
-      <em>services/api.ts</em>.
-    </p>
+    h2 {
+      color: #0b3b3b;
+    }
 
-    <h2>Modelo de datos (resumen)</h2>
-    <ul>
-      <li>
-        <strong>transactions:</strong> id, user_id, title, amount, type, icon,
-        date, created_at
-      </li>
-      <li><strong>budgets:</strong> id, user_id, category_id, amount</li>
-    </ul>
+    p,
+    li {
+      line-height: 1.5;
+    }
 
-    <h2>Stack tecnológico</h2>
-    <p>
-      React, React Native, Expo, TypeScript, Supabase, AsyncStorage,
-      react-native-gifted-charts, etc.
-    </p>
+    pre {
+      background: #f6f8fa;
+      padding: 12px;
+    }
+  </style>
+</head>
 
-    <h2>Variables de entorno</h2>
-    <ul>
-      <li>EXPO_PUBLIC_SUPABASE_URL</li>
-      <li>EXPO_PUBLIC_SUPABASE_ANON_KEY</li>
-    </ul>
+<body>
+  <h1>Presu — Descripción del Proyecto</h1>
+  <h2>Resumen ejecutivo</h2>
+  <p>
+    Presu es una aplicación móvil (Expo / React Native) para gestión personal
+    de finanzas que ayuda a los usuarios a ordenar sus ingresos, gastos y
+    presupuestos. Ofrece autenticación con Supabase, registro y recuperación
+    de contraseña, gestión de transacciones, visualizaciones de flujo y un
+    panel de cartera.
+  </p>
 
-    <h2>Cómo ejecutar localmente (demo rápido)</h2>
-    <ol>
-      <li>Clonar repo.</li>
-      <li>Instalar dependencias: <code>npm install</code>.</li>
-      <li>Añadir variables de entorno.</li>
-      <li>Ejecutar: <code>npx expo start</code>.</li>
-    </ol>
+  <h2>Propósito y público objetivo</h2>
+  <ul>
+    <li>
+      <strong>Propósito:</strong> Facilitar la organización y seguimiento del
+      flujo de caja personal y el control de presupuestos mensuales.
+    </li>
+    <li>
+      <strong>Público objetivo:</strong> Usuarios jóvenes-adultos y
+      profesionales; pequeñas PYMEs.
+    </li>
+  </ul>
 
-    <h2>Puntos de venta y discurso comercial</h2>
-    <p>
-      Problema: falta de visibilidad del flujo de caja. Solución: interfaz
-      simple y visualizaciones claras. Monetización: freemium, suscripciones,
-      B2B/white-label.
-    </p>
+  <h2>Funcionalidades principales</h2>
+  <ul>
+    <li>Registro e inicio de sesión con Supabase Auth.</li>
+    <li>Recuperación de contraseña mediante enlace y tokens.</li>
+    <li>CRUD de transacciones.</li>
+    <li>
+      Visualización de cartera: balance, ingresos vs gastos y flujo mensual.
+    </li>
+    <li>Gestión de presupuestos por categoría.</li>
+    <li>Soporte multiplataforma (iOS/Android/web).</li>
+  </ul>
 
-    <h2>Guión recomendado para la presentación (diapositivas)</h2>
-    <ol>
-      <li>Título y tagline</li>
-      <li>Problema</li>
-      <li>Solución</li>
-      <li>Demo UI</li>
-      <li>Tecnologías</li>
-      <li>Seguridad</li>
-      <li>Mercado</li>
-      <li>Roadmap</li>
-      <li>Equipo</li>
-      <li>Petición/CTA</li>
-    </ol>
+  <h2>Arquitectura y diseño técnico</h2>
+  <p>
+    Framework: Expo + React Native con TypeScript. Enrutamiento con
+    <em>expo-router</em>. Backend: Supabase (Auth + Postgres). Cliente
+    Supabase en <em>services/supabase.ts</em> y API en
+    <em>services/api.ts</em>.
+  </p>
 
-    <h2>Recursos y archivos importantes</h2>
-    <ul>
-      <li><em>app/</em> — Pantallas y rutas.</li>
-      <li><em>components/</em> — Componentes UI.</li>
-      <li><em>services/</em> — `supabase.ts`, `api.ts`.</li>
-    </ul>
+  <h2>Modelo de datos (resumen)</h2>
+  <ul>
+    <li>
+      <strong>transactions:</strong> id, user_id, title, amount, type, icon,
+      date, created_at
+    </li>
+    <li><strong>budgets:</strong> id, user_id, category_id, amount</li>
+  </ul>
 
-    <h2>Capturas de pantalla (simuladas)</h2>
-    <p>
-      Se incluyen capturas SVG que representan las pantallas clave. Estas
-      imágenes están en <em>docs/screenshots</em>.
-    </p>
-    <ul>
-      <li>
-        <img
-          src="screenshots/welcome.svg"
-          alt="Welcome"
-          style="width: 300px; border-radius: 12px"
-        />
-      </li>
-      <li>
-        <img
-          src="screenshots/login.svg"
-          alt="Login"
-          style="width: 300px; border-radius: 12px"
-        />
-      </li>
-      <li>
-        <img
-          src="screenshots/register.svg"
-          alt="Register"
-          style="width: 300px; border-radius: 12px"
-        />
-      </li>
-      <li>
-        <img
-          src="screenshots/wallet.svg"
-          alt="Wallet"
-          style="width: 300px; border-radius: 12px"
-        />
-      </li>
-    </ul>
+  <h2>Stack tecnológico</h2>
+  <p>
+    React, React Native, Expo, TypeScript, Supabase, AsyncStorage,
+    react-native-gifted-charts, etc.
+  </p>
 
-    <p>
-      -- Documento generado automáticamente. Abra este archivo en Microsoft Word
-      y guárdelo como <strong>.docx</strong> si necesita un formato Word nativo.
-    </p>
-  </body>
+  <h2>Variables de entorno</h2>
+  <ul>
+    <li>EXPO_PUBLIC_SUPABASE_URL</li>
+    <li>EXPO_PUBLIC_SUPABASE_ANON_KEY</li>
+  </ul>
+
+  <h2>Cómo ejecutar localmente (demo rápido)</h2>
+  <ol>
+    <li>Clonar repo.</li>
+    <li>Instalar dependencias: <code>npm install</code>.</li>
+    <li>Añadir variables de entorno.</li>
+    <li>Ejecutar: <code>npx expo start</code>.</li>
+  </ol>
+
+  <h2>Puntos de venta y discurso comercial</h2>
+  <p>
+    Problema: falta de visibilidad del flujo de caja. Solución: interfaz
+    simple y visualizaciones claras. Monetización: freemium, suscripciones,
+    B2B/white-label.
+  </p>
+
+  <h2>Guión recomendado para la presentación (diapositivas)</h2>
+  <ol>
+    <li>Título y tagline</li>
+    <li>Problema</li>
+    <li>Solución</li>
+    <li>Demo UI</li>
+    <li>Tecnologías</li>
+    <li>Seguridad</li>
+    <li>Mercado</li>
+    <li>Roadmap</li>
+    <li>Equipo</li>
+    <li>Petición/CTA</li>
+  </ol>
+
+  <h2>Recursos y archivos importantes</h2>
+  <ul>
+    <li><em>app/</em> — Pantallas y rutas.</li>
+    <li><em>components/</em> — Componentes UI.</li>
+    <li><em>services/</em> — `supabase.ts`, `api.ts`.</li>
+  </ul>
+
+  <h2>Capturas de pantalla (simuladas)</h2>
+  <p>
+    Se incluyen capturas SVG que representan las pantallas clave. Estas
+    imágenes están en <em>docs/screenshots</em>.
+  </p>
+  <ul>
+    <li>
+      <img src="screenshots/welcome.svg" alt="Welcome" style="width: 300px; border-radius: 12px" />
+    </li>
+    <li>
+      <img src="screenshots/login.svg" alt="Login" style="width: 300px; border-radius: 12px" />
+    </li>
+    <li>
+      <img src="screenshots/register.svg" alt="Register" style="width: 300px; border-radius: 12px" />
+    </li>
+    <li>
+      <img src="screenshots/wallet.svg" alt="Wallet" style="width: 300px; border-radius: 12px" />
+    </li>
+  </ul>
+
+  <p>
+    -- Documento generado automáticamente. Abra este archivo en Microsoft Word
+    y guárdelo como <strong>.docx</strong> si necesita un formato Word nativo.
+  </p>
+</body>
+
 </html>
