@@ -1,6 +1,6 @@
-import { supabase } from './supabase';
-import { Transaction } from '../components/ui/TransactionItem';
-import * as Linking from 'expo-linking';
+import Constants from "expo-constants";
+import { Transaction } from "../components/ui/TransactionItem";
+import { supabase } from "./supabase";
 
 export interface Budget {
   id: string;
@@ -39,17 +39,19 @@ export const CloudAPI = {
 
   // Transactions
   getTransactions: async (): Promise<Transaction[]> => {
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     if (!session?.user) return [];
 
     const { data, error } = await supabase
-      .from('transactions')
-      .select('*')
-      .eq('user_id', session.user.id)
-      .order('created_at', { ascending: false });
+      .from("transactions")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error('Error fetching transactions:', error);
+      console.error("Error fetching transactions:", error);
       return [];
     }
 
@@ -57,19 +59,27 @@ export const CloudAPI = {
       id: item.id,
       title: item.title,
       // Format date nicely from timestamp
-      date: new Date(item.date).toLocaleDateString() + ' ' + new Date(item.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      date:
+        new Date(item.date).toLocaleDateString() +
+        " " +
+        new Date(item.date).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
       amount: Number(item.amount),
       type: item.type,
       icon: item.icon as any,
     }));
   },
 
-  addTransaction: async (transaction: Omit<Transaction, 'id' | 'date'>) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) throw new Error('Not authenticated');
+  addTransaction: async (transaction: Omit<Transaction, "id" | "date">) => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session?.user) throw new Error("Not authenticated");
 
     const { data, error } = await supabase
-      .from('transactions')
+      .from("transactions")
       .insert([
         {
           user_id: session.user.id,
@@ -77,7 +87,7 @@ export const CloudAPI = {
           amount: transaction.amount,
           type: transaction.type,
           icon: transaction.icon,
-        }
+        },
       ])
       .select()
       .single();
@@ -94,11 +104,14 @@ export const CloudAPI = {
     } as Transaction;
   },
 
-  updateTransaction: async (id: string, transaction: Partial<Omit<Transaction, 'id' | 'date'>>) => {
+  updateTransaction: async (
+    id: string,
+    transaction: Partial<Omit<Transaction, "id" | "date">>,
+  ) => {
     const { data, error } = await supabase
-      .from('transactions')
+      .from("transactions")
       .update(transaction)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -107,26 +120,25 @@ export const CloudAPI = {
   },
 
   deleteTransaction: async (id: string) => {
-    const { error } = await supabase
-      .from('transactions')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabase.from("transactions").delete().eq("id", id);
 
     if (error) throw new Error(error.message);
   },
 
   // Budgets
   getBudgets: async (): Promise<Budget[]> => {
-    const { data: { session } } = await supabase.auth.getSession();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     if (!session?.user) return [];
 
     const { data, error } = await supabase
-      .from('budgets')
-      .select('*')
-      .eq('user_id', session.user.id);
+      .from("budgets")
+      .select("*")
+      .eq("user_id", session.user.id);
 
     if (error) {
-      console.error('Error fetching budgets:', error);
+      console.error("Error fetching budgets:", error);
       return [];
     }
 
@@ -134,17 +146,22 @@ export const CloudAPI = {
   },
 
   setBudget: async (category_id: string, amount: number) => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) throw new Error('Not authenticated');
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session?.user) throw new Error("Not authenticated");
 
     // Using upsert based on user_id and category_id unique constraint
     const { data, error } = await supabase
-      .from('budgets')
-      .upsert({
-        user_id: session.user.id,
-        category_id,
-        amount,
-      }, { onConflict: 'user_id, category_id' })
+      .from("budgets")
+      .upsert(
+        {
+          user_id: session.user.id,
+          category_id,
+          amount,
+        },
+        { onConflict: "user_id, category_id" },
+      )
       .select()
       .single();
 
@@ -154,7 +171,11 @@ export const CloudAPI = {
 
   // Password Recovery
   sendPasswordResetEmail: async (email: string) => {
-    const redirectUrl = Linking.createURL('reset-password');
+    const appScheme = Constants.expoConfig?.scheme || "presuapp";
+    const redirectUrl =
+      process.env.EXPO_PUBLIC_SUPABASE_REDIRECT_URL ||
+      `${appScheme}://reset-password`;
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: redirectUrl,
     });
@@ -162,34 +183,38 @@ export const CloudAPI = {
   },
 
   setSessionFromUrl: async (url: string) => {
-    let hash = '';
-    if (url.includes('#')) {
-      hash = url.split('#')[1];
-    } else if (url.includes('?')) {
-      hash = url.split('?')[1];
+    let hash = "";
+    if (url.includes("#")) {
+      hash = url.split("#")[1];
+    } else if (url.includes("?")) {
+      hash = url.split("?")[1];
     }
     if (!hash) {
-      throw new Error('No se encontraron parámetros de recuperación en el enlace.');
+      throw new Error(
+        "No se encontraron parámetros de recuperación en el enlace.",
+      );
     }
 
     const params: Record<string, string> = {};
-    hash.split('&').forEach(part => {
-      const [key, val] = part.split('=');
+    hash.split("&").forEach((part) => {
+      const [key, val] = part.split("=");
       if (key && val) {
         params[key] = decodeURIComponent(val);
       }
     });
 
-    const access_token = params['access_token'];
-    const refresh_token = params['refresh_token'];
+    const access_token = params["access_token"];
+    const refresh_token = params["refresh_token"];
 
     if (!access_token || !refresh_token) {
-      throw new Error('Los tokens de acceso y actualización no están presentes en el enlace.');
+      throw new Error(
+        "Los tokens de acceso y actualización no están presentes en el enlace.",
+      );
     }
 
     const { error } = await supabase.auth.setSession({
       access_token,
-      refresh_token
+      refresh_token,
     });
     if (error) throw new Error(error.message);
   },
@@ -197,5 +222,5 @@ export const CloudAPI = {
   updatePassword: async (password: string) => {
     const { error } = await supabase.auth.updateUser({ password });
     if (error) throw new Error(error.message);
-  }
+  },
 };

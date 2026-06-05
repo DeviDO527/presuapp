@@ -1,40 +1,69 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Colors } from '../constants/Colors';
-import { Ionicons } from '@expo/vector-icons';
-import { Button } from '../components/ui/Button';
-import { CloudAPI } from '../services/api';
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
+import { Button } from "../components/ui/Button";
+import { Colors } from "../constants/Colors";
+import { CloudAPI } from "../services/api";
 
-const CATEGORIES = [
-  { id: 'comida', name: 'Comida', icon: 'restaurant' },
-  { id: 'transporte', name: 'Transporte', icon: 'car' },
-  { id: 'renta', name: 'Renta', icon: 'home' },
-  { id: 'compras', name: 'Compras', icon: 'cart' },
-  { id: 'ocio', name: 'Ocio', icon: 'game-controller' },
-  { id: 'salud', name: 'Salud', icon: 'medkit' },
-  { id: 'servicios', name: 'Servicios', icon: 'flash' },
-  { id: 'otros', name: 'Otros', icon: 'ellipsis-horizontal' },
+const EXPENSE_CATEGORIES = [
+  { id: "comida", name: "Comida", icon: "restaurant" },
+  { id: "transporte", name: "Transporte", icon: "car" },
+  { id: "renta", name: "Renta", icon: "home" },
+  { id: "compras", name: "Compras", icon: "cart" },
+  { id: "ocio", name: "Ocio", icon: "game-controller" },
+  { id: "salud", name: "Salud", icon: "medkit" },
+  { id: "servicios", name: "Servicios", icon: "flash" },
+  { id: "otros", name: "Otros", icon: "ellipsis-horizontal" },
+];
+
+const INCOME_CATEGORIES = [
+  { id: "salario", name: "Salario", icon: "briefcase" },
+  { id: "freelance", name: "Freelance", icon: "laptop" },
+  { id: "ventas", name: "Ventas", icon: "pricetag" },
+  { id: "inversiones", name: "Inversiones", icon: "trending-up" },
+  { id: "intereses", name: "Intereses", icon: "stats-chart" },
+  { id: "regalo", name: "Regalo", icon: "gift" },
+  { id: "reembolso", name: "Reembolso", icon: "refresh" },
+  { id: "otros_ingresos", name: "Otros", icon: "wallet" },
 ];
 
 export default function NewTransactionScreen() {
   const router = useRouter();
-  const [amount, setAmount] = useState('');
-  const [type, setType] = useState<'expense' | 'income'>('expense');
-  const [selectedCat, setSelectedCat] = useState('comida');
-  const [note, setNote] = useState('');
+  const [amount, setAmount] = useState("");
+  const [type, setType] = useState<"expense" | "income">("expense");
+  const categories = useMemo(
+    () => (type === "expense" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES),
+    [type],
+  );
+  const [selectedCat, setSelectedCat] = useState(EXPENSE_CATEGORIES[0].id);
+  const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!categories.some((c) => c.id === selectedCat)) {
+      setSelectedCat(categories[0].id);
+    }
+  }, [categories, selectedCat]);
 
   const handleSave = async () => {
     if (!amount || isNaN(Number(amount))) return;
     try {
       setLoading(true);
-      const category = CATEGORIES.find(c => c.id === selectedCat);
+      const category = categories.find((c) => c.id === selectedCat);
       await CloudAPI.addTransaction({
-        title: category?.name || 'Transacción',
-        amount: type === 'expense' ? -Number(amount) : Number(amount),
+        title: category?.name || "Transacción",
+        amount: type === "expense" ? -Number(amount) : Number(amount),
         type: type,
-        icon: category?.icon as any || 'cash-outline',
+        icon: (category?.icon as any) || "cash-outline",
       });
       router.back();
     } catch (error) {
@@ -47,7 +76,10 @@ export default function NewTransactionScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.closeButton}>
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={styles.closeButton}
+        >
           <Ionicons name="close" size={28} color={Colors.dark.text} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Nueva Transacción</Text>
@@ -57,17 +89,37 @@ export default function NewTransactionScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Type selector */}
         <View style={styles.typeSelector}>
-          <TouchableOpacity 
-            style={[styles.typeBtn, type === 'expense' && styles.typeBtnActiveExpense]}
-            onPress={() => setType('expense')}
+          <TouchableOpacity
+            style={[
+              styles.typeBtn,
+              type === "expense" && styles.typeBtnActiveExpense,
+            ]}
+            onPress={() => setType("expense")}
           >
-            <Text style={[styles.typeText, type === 'expense' && styles.typeTextActive]}>Gasto</Text>
+            <Text
+              style={[
+                styles.typeText,
+                type === "expense" && styles.typeTextActive,
+              ]}
+            >
+              Gasto
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity 
-            style={[styles.typeBtn, type === 'income' && styles.typeBtnActiveIncome]}
-            onPress={() => setType('income')}
+          <TouchableOpacity
+            style={[
+              styles.typeBtn,
+              type === "income" && styles.typeBtnActiveIncome,
+            ]}
+            onPress={() => setType("income")}
           >
-            <Text style={[styles.typeText, type === 'income' && styles.typeTextActive]}>Ingreso</Text>
+            <Text
+              style={[
+                styles.typeText,
+                type === "income" && styles.typeTextActive,
+              ]}
+            >
+              Ingreso
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -75,7 +127,19 @@ export default function NewTransactionScreen() {
         <View style={styles.amountContainer}>
           <Text style={styles.amountLabel}>MONTO</Text>
           <View style={styles.amountInputWrapper}>
-            <Text style={[styles.currencySymbol, { color: type === 'expense' ? Colors.dark.danger : Colors.dark.success }]}>$</Text>
+            <Text
+              style={[
+                styles.currencySymbol,
+                {
+                  color:
+                    type === "expense"
+                      ? Colors.dark.danger
+                      : Colors.dark.success,
+                },
+              ]}
+            >
+              $
+            </Text>
             <TextInput
               style={styles.amountInput}
               value={amount}
@@ -88,54 +152,81 @@ export default function NewTransactionScreen() {
         </View>
 
         {/* Categories */}
-        <Text style={styles.sectionTitle}>CATEGORÍA</Text>
+        <Text style={styles.sectionTitle}>
+          {type === "expense" ? "CATEGORÍA DE GASTO" : "CATEGORÍA DE INGRESO"}
+        </Text>
         <View style={styles.categoryGrid}>
-          {CATEGORIES.map(cat => {
+          {categories.map((cat) => {
             const isSelected = selectedCat === cat.id;
             return (
-              <TouchableOpacity 
-                key={cat.id} 
-                style={[styles.categoryItem, isSelected && styles.categoryItemActive]}
+              <TouchableOpacity
+                key={cat.id}
+                style={[
+                  styles.categoryItem,
+                  isSelected && styles.categoryItemActive,
+                ]}
                 onPress={() => setSelectedCat(cat.id)}
               >
-                <View style={[styles.categoryIcon, isSelected && styles.categoryIconActive]}>
-                  <Ionicons 
-                    name={cat.icon as any} 
-                    size={24} 
-                    color={isSelected ? '#131B19' : Colors.dark.icon} 
+                <View
+                  style={[
+                    styles.categoryIcon,
+                    isSelected && styles.categoryIconActive,
+                  ]}
+                >
+                  <Ionicons
+                    name={cat.icon as any}
+                    size={24}
+                    color={isSelected ? "#131B19" : Colors.dark.icon}
                   />
                 </View>
-                <Text style={[styles.categoryText, isSelected && styles.categoryTextActive]}>
+                <Text
+                  style={[
+                    styles.categoryText,
+                    isSelected && styles.categoryTextActive,
+                  ]}
+                >
                   {cat.name}
                 </Text>
               </TouchableOpacity>
-            )
+            );
           })}
         </View>
 
         {/* Date (Mocked visually) */}
         <Text style={styles.sectionTitle}>FECHA</Text>
         <View style={styles.dateSelector}>
-          <Ionicons name="calendar-outline" size={20} color={Colors.dark.icon} />
+          <Ionicons
+            name="calendar-outline"
+            size={20}
+            color={Colors.dark.icon}
+          />
           <Text style={styles.dateText}>Hoy</Text>
         </View>
 
         {/* Note */}
         <Text style={styles.sectionTitle}>NOTA (OPCIONAL)</Text>
         <View style={styles.noteContainer}>
-          <Ionicons name="chatbubble-ellipses-outline" size={20} color={Colors.dark.icon} />
+          <Ionicons
+            name="chatbubble-ellipses-outline"
+            size={20}
+            color={Colors.dark.icon}
+          />
           <TextInput
             style={styles.noteInput}
             value={note}
             onChangeText={setNote}
-            placeholder="¿En qué gastaste?"
+            placeholder={
+              type === "expense"
+                ? "¿En qué gastaste?"
+                : "¿De dónde proviene este ingreso?"
+            }
             placeholderTextColor={Colors.dark.textMuted}
           />
         </View>
 
-        <Button 
-          title="Guardar Transacción" 
-          onPress={handleSave} 
+        <Button
+          title="Guardar Transacción"
+          onPress={handleSave}
           loading={loading}
           style={styles.saveBtn}
         />
@@ -150,9 +241,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.dark.background,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 16,
   },
   closeButton: {
@@ -162,13 +253,13 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: Colors.dark.text,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   scrollContent: {
     padding: 24,
   },
   typeSelector: {
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: Colors.dark.card,
     borderRadius: 12,
     padding: 4,
@@ -177,7 +268,7 @@ const styles = StyleSheet.create({
   typeBtn: {
     flex: 1,
     paddingVertical: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderRadius: 8,
   },
   typeBtnActiveExpense: {
@@ -188,63 +279,63 @@ const styles = StyleSheet.create({
   },
   typeText: {
     color: Colors.dark.textMuted,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   typeTextActive: {
-    color: '#000',
+    color: "#000",
   },
   amountContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 32,
   },
   amountLabel: {
     color: Colors.dark.textMuted,
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     letterSpacing: 2,
     marginBottom: 16,
   },
   amountInputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: Colors.dark.card,
     paddingBottom: 8,
   },
   currencySymbol: {
     fontSize: 48,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginRight: 12,
   },
   amountInput: {
     fontSize: 56,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: Colors.dark.text,
     minWidth: 150,
   },
   sectionTitle: {
     color: Colors.dark.textMuted,
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     letterSpacing: 1,
     marginBottom: 12,
   },
   categoryGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
     marginBottom: 24,
   },
   categoryItem: {
-    width: '23%',
-    alignItems: 'center',
+    width: "23%",
+    alignItems: "center",
     marginBottom: 16,
     backgroundColor: Colors.dark.card,
     paddingVertical: 12,
     borderRadius: 16,
   },
   categoryItemActive: {
-    backgroundColor: 'rgba(12, 221, 123, 0.1)',
+    backgroundColor: "rgba(12, 221, 123, 0.1)",
     borderColor: Colors.dark.tint,
     borderWidth: 1,
   },
@@ -253,8 +344,8 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: Colors.dark.cardSecondary,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 8,
   },
   categoryIconActive: {
@@ -266,11 +357,11 @@ const styles = StyleSheet.create({
   },
   categoryTextActive: {
     color: Colors.dark.tint,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   dateSelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: Colors.dark.card,
     padding: 16,
     borderRadius: 12,
@@ -282,8 +373,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   noteContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: Colors.dark.card,
     padding: 12,
     borderRadius: 12,
